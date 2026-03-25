@@ -13,6 +13,17 @@
 
 ---
 
+## Структура проекта
+
+```
+.
+├── docker-compose.yml
+├── Dockerfile
+└── entrypoint.sh
+```
+
+---
+
 ## Требования
 
 - Ubuntu 24.04 LTS на обеих машинах
@@ -28,12 +39,14 @@
 # Проверить имя сетевого интерфейса и подставить в docker-compose.yml → parent
 ip route | grep default
 
-# Запустить кластер
-docker compose up -d
+# Собрать образ и запустить кластер
+docker compose up -d --build
 
 # Проверить статус (ждать UN UN UN)
 docker exec cassandra1 nodetool status
 ```
+
+SSH на cassandra1 (192.168.1.200) поднимается автоматически при старте контейнера — настраивать вручную ничего не нужно.
 
 ---
 
@@ -56,17 +69,9 @@ SELECT peer, data_center, rack FROM system.peers;
 
 ## SSH доступ к cassandra1
 
-```bash
-# Установить SSH внутри контейнера (выполнить на Машине А)
-docker exec -it cassandra1 bash -c "
-    apt-get update -q &&
-    apt-get install -y openssh-server &&
-    echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config &&
-    service ssh start &&
-    echo 'root:cassandra' | chpasswd
-"
+SSH встроен в образ через `Dockerfile` и стартует автоматически вместе с контейнером.
 
-# Подключиться
+```bash
 ssh root@192.168.1.200
 # пароль: cassandra
 ```

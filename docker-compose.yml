@@ -11,7 +11,7 @@ networks:
 
 services:
   cassandra1:
-    image: cassandra:4.1
+    build: .
     container_name: cassandra1
     hostname: cassandra1
     networks:
@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
 
   cassandra2:
-    image: cassandra:4.1
+    build: .
     container_name: cassandra2
     hostname: cassandra2
     networks:
@@ -72,7 +72,7 @@ services:
     restart: unless-stopped
 
   cassandra3:
-    image: cassandra:4.1
+    build: .
     container_name: cassandra3
     hostname: cassandra3
     networks:
